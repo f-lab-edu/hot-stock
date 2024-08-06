@@ -9,20 +9,19 @@ import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+
 @Repository
-@RequiredArgsConstructor
 @Slf4j
 public class DatabaseRepository {
-    private final EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
-    public boolean save(User user) {
+    public void save(User user) {
         try {
             em.persist(user);
-            return true;
         } catch (EntityExistsException e) {
             log.error("User already exists: {}", user.getId());
             throw new UserAlreadyExistsException("User already exists with ID: " + user.getId());
