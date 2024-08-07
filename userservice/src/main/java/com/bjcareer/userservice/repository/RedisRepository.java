@@ -1,7 +1,6 @@
 package com.bjcareer.userservice.repository;
 
 import com.bjcareer.userservice.service.vo.JwtTokenVO;
-import com.bjcareer.userservice.service.vo.SessionVO;
 import com.bjcareer.userservice.service.vo.TokenVO;
 import com.bjcareer.userservice.domain.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -37,15 +36,15 @@ public class RedisRepository {
     }
 
 
-    public void saveJWT(String key, SessionVO token, Long expirationTime) {
+    public void saveJWT(String key, JwtTokenVO token, Long expirationTime) {
         RBucket<Object> bucket = redissonClient.getBucket(key);
         bucket.set(token, Duration.of(expirationTime, TimeUnit.SECONDS.toChronoUnit()));
     }
 
-    public Optional<SessionVO> findAuthTokenBySessionId(String key) {
+    public Optional<JwtTokenVO> findAuthTokenBySessionId(String key) {
         RBucket<Object> bucket = redissonClient.getBucket(key);
         if (bucket.isExists()) {
-            return Optional.of((SessionVO) bucket.get());
+            return Optional.of((JwtTokenVO) bucket.get());
         }
         return Optional.empty();
     }
